@@ -17,12 +17,12 @@ DATA_PATH = Path("images")
 
 def get_test_images_from_folder(data_path=DATA_PATH):
     test_img_list = [str(Path(data_path)/file) for file in os.listdir(data_path) \
-                     if imghdr.what(Path(data_path)/file) in ["jpeg", "png"]]
+                     if os.path.isfile(Path(data_path)/file) and imghdr.what(Path(data_path)/file) in ["jpeg", "png"]]
     print(f"Found {len(test_img_list)} images in folder: {data_path}.")
     return  test_img_list
 
 def load_model(test_img_list):
-    print(f"Loading model {MODEL_PATH}/{MODEL_FILENAME}.")
+    print(f"Loading model: {MODEL_PATH}/{MODEL_FILENAME}.")
     print(f"Running inference on {len(test_img_list)} images.")
     learn = load_learner(MODEL_PATH, MODEL_FILENAME, test=test_img_list)
     learn.callback_fns=[]
