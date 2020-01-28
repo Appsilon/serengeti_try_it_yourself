@@ -10,12 +10,18 @@ from fastai.vision import *
 import cv2 as cv
 import matplotlib.pyplot as plt
 
+try:
+  from google.colab import files
+  IN_COLAB = True
+except:
+  IN_COLAB = False
 
 MODEL_PATH = Path("model")
 MODEL_FILENAME = "trained_model.pkl"
-DATA_PATH = Path("images")
+DATA_PATH_SERENGETI = Path("images_serengeti")
+DATA_PATH_FUN_EXAMPLES = Path("images_fun_examples")
 
-def get_test_images_from_folder(data_path=DATA_PATH):
+def get_test_images_from_folder(data_path):
     test_img_list = [str(Path(data_path)/file) for file in os.listdir(data_path) \
                      if os.path.isfile(Path(data_path)/file) and imghdr.what(Path(data_path)/file) in ["jpeg", "png"]]
     print(f"Found {len(test_img_list)} images in folder: {data_path}.")
@@ -71,8 +77,25 @@ def print_results(test_img_list, pred_dicts):
     for img, pred_dict in zip(test_img_list, pred_dicts):
         plot_predictions(img, pred_dict)
 
-def run_classification(images_folder=DATA_PATH):
-    test_img_list = get_test_images_from_folder()
+def upload_files():
+    """ used on Google Colab to upload data """
+    uploaded = files.upload()
+    for k, v in uploaded.items():
+        open(k, 'wb').write(v)
+    return list(uploaded.keys())
+
+def run_classification(images_from="serengeti"):
+    if images_from == "serengeti":
+        test_img_list = get_test_images_from_folder(data_path=DATA_PATH_SERENGETI)
+    elif images_from == "fun_examples":
+        test_img_list = get_test_images_from_folder(data_path=DATA_PATH_FUN_EXAMPLES)
+    elif images_from == "upload":
+        if not IN_COLAB:
+            raise Exception('images_from="upload" is only available on Google Colab')
+        # Warning - this is an option meant to work on Google Colab
+        test_img_list = upload_files()
+    else:
+        raise Exception('Please choose: images_from="serengeti", images_from="fun_exmaples" or images_from="upload" (only available on Google Colab)')
     learn = load_model(test_img_list)
     preds = run_inference(learn)
     classes = learn.data.classes
