@@ -52,7 +52,9 @@ def plot_predictions(test_img_list, pred_dicts):
     fig, axs = plt.subplots(len(test_img_list),
                             2,
                             figsize=(12, 4 * len(test_img_list)),
-                            gridspec_kw={'width_ratios': [4, 1]}, constrained_layout=True)
+                            gridspec_kw={'width_ratios': [4, 1]},
+                            constrained_layout=True,
+                            squeeze=False)
     fig.suptitle('Top 5 predictions per image',
                  color=markings_color,
                  va="bottom",
