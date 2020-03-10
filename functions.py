@@ -21,14 +21,16 @@ MODEL_PATH = Path("model")
 MODEL_FILENAME = "trained_model.pkl"
 DATA_PATH_SERENGETI = Path("images_serengeti")
 DATA_PATH_FUN_EXAMPLES = Path("images_fun_examples")
-
+ALLOWED_IMAGE_EXTENSIONS = {"jpeg", "png"}
 
 def get_test_images_from_folder(data_path):
     test_img_list = [
-        str(Path(data_path) / file)
-        for file in os.listdir(data_path)
-        if os.path.isfile(Path(data_path) / file)
-        and imghdr.what(Path(data_path) / file) in ["jpeg", "png"]
+        image_path for image_path in [
+            str(Path(data_path) / file)
+            for file in os.listdir(data_path)
+        ]
+        if os.path.isfile(image_path)
+        and imghdr.what(image_path) in ALLOWED_IMAGE_EXTENSIONS
     ]
     print(f"Found {len(test_img_list)} images in folder: {data_path}.")
     return test_img_list
