@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Development script for PyInstaller debugging.
+
 #1. Bundle
 
 pyinstaller main.py --clean --noconfirm \
@@ -10,6 +12,6 @@ pushd dist/main
 
 
 #3. Run
-LD_LIBRARY_PATH=torch/lib/ ./main ../../images_fun_examples
+ ./main ../../images_fun_examples
 
 popd

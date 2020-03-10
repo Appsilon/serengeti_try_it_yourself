@@ -15,7 +15,19 @@ To play with it you can:
 We have provided a few images from the Snapshot Serengeti project (on which the model was trained), and a sample of fun examples. Let us know if you find something cool or funny!
 
 
-*Note:*
+## PyInstaller
+In order to bundle the model into single executable, please make sure you have installed all dependencies from `requirements.txt` (`pip install -r requirements.txt`) and you are running Python 3.6 (tested on > 3.6.8).
+
+### Dev script
+Running `./dev.sh` will recreate the executable from scratch (cleaning the previous artifacts). The destination path is `dist/main`.
+
+### Generating executable
+Run `pyinstaller main.py --clean --noconfirm --additional-hooks-dir=hooks`
+
+### Running executable
+From generated `./dist/main` directory: `./main [images_path]`
+
+## Model
 
 The classes our model is trained to recognize are:
 
