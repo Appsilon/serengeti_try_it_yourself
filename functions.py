@@ -21,6 +21,8 @@ MODEL_FILENAME = "trained_model.pkl"
 DATA_PATH_SERENGETI = Path("images_serengeti")
 DATA_PATH_FUN_EXAMPLES = Path("images_fun_examples")
 
+
+
 def get_test_images_from_folder(data_path):
     test_img_list = [str(Path(data_path)/file) for file in os.listdir(data_path) \
                      if os.path.isfile(Path(data_path)/file) and imghdr.what(Path(data_path)/file) in ["jpeg", "png"]]
@@ -92,18 +94,17 @@ def upload_files():
         open(k, 'wb').write(v)
     return list(uploaded.keys())
 
-def run_classification(images_from="serengeti"):
-    if images_from == "serengeti":
-        test_img_list = get_test_images_from_folder(data_path=DATA_PATH_SERENGETI)
-    elif images_from == "fun_examples":
-        test_img_list = get_test_images_from_folder(data_path=DATA_PATH_FUN_EXAMPLES)
-    elif images_from == "upload":
+
+def run_classification(images_path=None, images_from="serengeti", images_upload=False):
+    if images_upload:
         if not IN_COLAB:
             raise Exception('images_from="upload" is only available on Google Colab')
         # Warning - this is an option meant to work on Google Colab
         test_img_list = upload_files()
     else:
-        raise Exception('Please choose: images_from="serengeti", images_from="fun_exmaples" or images_from="upload" (only available on Google Colab)')
+        fixed_paths = {"serengeti": DATA_PATH_SERENGETI, "fun_examples": DATA_PATH_FUN_EXAMPLES}
+        path = Path(images_path) if images_path else fixed_paths[images_from]
+        test_img_list = get_test_images_from_filder(path)
     learn = load_model(test_img_list)
     preds = run_inference(learn)
     classes = learn.data.classes
