@@ -4,7 +4,7 @@ on: push
 
 jobs:
   release:
-    runs-on: ${{ matrix.is }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [macos-latest, windows-2019, ubuntu-18.04]
