@@ -119,7 +119,7 @@ def run_classification(images_path=None, images_from="serengeti", images_upload=
             "fun_examples": DATA_PATH_FUN_EXAMPLES,
         }
         path = Path(images_path) if images_path else fixed_paths[images_from]
-        test_img_list = get_test_images_from_filder(path)
+        test_img_list = get_test_images_from_folder(path)
     learn = load_model(test_img_list)
     preds = run_inference(learn)
     classes = learn.data.classes
